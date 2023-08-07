@@ -67,6 +67,19 @@
                         <q-item-label class="text-weight-medium">Product List</q-item-label>
                     </q-item-section>
                 </q-item>
+
+                <q-expansion-item class="text-weight-medium" icon="settings" label="Settings">
+                    <q-list class="q-pl-lg">
+                        <q-item clickable tag="a" to="/taxes">
+                            <q-item-section avatar>
+                                <q-icon name="attach_money" />
+                            </q-item-section>
+                            <q-item-section>
+                                <q-item-label class="text-weight-medium">Taxes</q-item-label>
+                            </q-item-section>
+                        </q-item>
+                    </q-list>
+                </q-expansion-item>
             </q-list>
         </q-drawer>
 

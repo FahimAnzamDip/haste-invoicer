@@ -7,30 +7,27 @@
                 </template>
 
                 <q-breadcrumbs-el label="Home" icon="home" to="/" />
-                <q-breadcrumbs-el label="Categories" icon="list" to="/categories" />
+                <q-breadcrumbs-el label="Tags" icon="list" to="/tags" />
                 <q-breadcrumbs-el :label="route.params.id ? 'Edit' : 'Add'" :icon="route.params.id ? 'edit' : 'add_box'" />
             </q-breadcrumbs>
             <div class="row q-mb-lg">
                 <div class="col-12">
                     <q-card>
                         <q-card-section>
-                            <h5 v-if="route.params.id" class="q-mb-xl q-mt-none">Edit Category</h5>
-                            <h5 v-else class="q-mb-xl q-mt-none">Add Category</h5>
-                            <q-form @submit.prevent="addCategory" autofocus class="q-gutter-lg">
+                            <h5 v-if="route.params.id" class="q-mb-xl q-mt-none">Edit Tag</h5>
+                            <h5 v-else class="q-mb-xl q-mt-none">Add Tag</h5>
+                            <q-form @submit.prevent="addTag" autofocus class="q-gutter-lg">
                                 <div class="row">
                                     <div class="col-12">
                                         <q-input
                                             v-model="form.name"
                                             square
                                             filled
-                                            label="Category Name"
+                                            label="Tag Name"
                                             lazy-rules
-                                            :rules="[(val) => (val && val.length > 0) || 'Please enter category name']"
+                                            :rules="[(val) => (val && val.length > 0) || 'Please enter Tag name']"
                                             :loading="loading"
                                         />
-                                    </div>
-                                    <div class="col-12">
-                                        <q-input v-model="form.description" square filled label="Description" :loading="loading" />
                                     </div>
                                 </div>
 
@@ -60,21 +57,19 @@ let loading = ref(false);
 
 let form = reactive({
     name: '',
-    description: '',
 });
 
 onMounted(() => {
     if (route.params.id) {
-        getCategory();
+        getTag();
     }
 });
 
-let getCategory = () => {
+let getTag = () => {
     loading.value = true;
-    api.get(`/categories/${route.params.id}`)
+    api.get(`/tags/${route.params.id}`)
         .then((response) => {
             form.name = response.data.data.name;
-            form.description = response.data.data.description;
             loading.value = false;
         })
         .catch((error) => {
@@ -88,11 +83,11 @@ let getCategory = () => {
         });
 };
 
-let addCategory = () => {
+let addTag = () => {
     loading.value = true;
 
     if (route.params.id) {
-        api.put(`/categories/${route.params.id}`, form)
+        api.put(`/tags/${route.params.id}`, form)
             .then((response) => {
                 $q.notify({
                     message: `${response.data.message}`,
@@ -112,7 +107,7 @@ let addCategory = () => {
                 loading.value = false;
             });
     } else {
-        api.post('/categories', form)
+        api.post('/tags', form)
             .then((response) => {
                 $q.notify({
                     message: `${response.data.message}`,
@@ -122,7 +117,7 @@ let addCategory = () => {
                 });
                 loading.value = false;
 
-                $router.push({ path: '/categories' });
+                $router.push({ path: '/tags' });
             })
             .catch((error) => {
                 $q.notify({

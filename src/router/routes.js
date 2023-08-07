@@ -36,6 +36,26 @@ const routes = [
         ],
     },
     {
+        path: '/tags',
+        component: () => import('layouts/MainLayout.vue'),
+        meta: { auth: true },
+        children: [
+            { path: '', name: 'tags', component: () => import('pages/products/tags/TagIndex.vue') },
+            { path: 'add', name: 'tagsAdd', component: () => import('pages/products/tags/TagAddEdit.vue') },
+            { path: 'edit/:id', name: 'tagsEdit', component: () => import('pages/products/tags/TagAddEdit.vue') },
+        ],
+    },
+    {
+        path: '/taxes',
+        component: () => import('layouts/MainLayout.vue'),
+        meta: { auth: true },
+        children: [
+            { path: '', name: 'taxes', component: () => import('pages/taxes/TaxIndex.vue') },
+            { path: 'add', name: 'taxesAdd', component: () => import('pages/taxes/TaxAddEdit.vue') },
+            { path: 'edit/:id', name: 'taxesEdit', component: () => import('pages/taxes/TaxAddEdit.vue') },
+        ],
+    },
+    {
         path: '/products',
         component: () => import('layouts/MainLayout.vue'),
         meta: { auth: true },

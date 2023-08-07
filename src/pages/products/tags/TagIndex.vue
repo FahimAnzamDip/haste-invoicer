@@ -7,30 +7,23 @@
                 </template>
 
                 <q-breadcrumbs-el label="Home" icon="home" to="/" />
-                <q-breadcrumbs-el label="Categories" icon="list" />
+                <q-breadcrumbs-el label="Tags" icon="list" />
             </q-breadcrumbs>
 
             <div class="row q-mb-lg">
                 <div class="col-12">
                     <div class="row justify-between items-center">
-                        <h5 class="q-mb-none q-mt-none">Product Categories</h5>
-                        <q-btn color="secondary" icon-right="add" label="Add Category" tag="a" to="/categories/add" />
+                        <h5 class="q-mb-none q-mt-none">Product Tags</h5>
+                        <q-btn color="secondary" icon-right="add" label="Add Tag" tag="a" to="/tags/add" />
                     </div>
                 </div>
             </div>
 
             <div class="row">
-                <div class="col-12 col-md-3 q-mb-md">
-                    <q-input dense debounce="400" color="primary" v-model="search" placeholder="search by category name">
-                        <template v-slot:append>
-                            <q-icon name="search" />
-                        </template>
-                    </q-input>
-                </div>
                 <div class="col-12">
                     <q-table
                         :columns="columns"
-                        :rows="categories"
+                        :rows="tags"
                         row-key="ID"
                         :loading="loading"
                         table-header-class="bg-blue-grey-1"
@@ -45,7 +38,7 @@
                                     size="sm"
                                     class="q-mr-sm"
                                     tag="a"
-                                    :to="{ path: `/categories/edit/${props.key}` }"
+                                    :to="{ path: `/tags/edit/${props.key}` }"
                                 />
                                 <q-btn @click="confirm(props.key)" round color="negative" icon="delete" size="sm" :loading="loading" />
                             </q-td>
@@ -63,14 +56,13 @@ import { useQuasar } from 'quasar';
 const $q = useQuasar();
 
 onMounted(() => {
-    getCategories();
+    getTags();
 });
 
-let search = ref('');
 let columns = [
     {
         name: 'ID',
-        label: 'Category ID',
+        label: 'Tag ID',
         field: (row) => row.ID,
         align: 'center',
         sortable: true,
@@ -83,14 +75,6 @@ let columns = [
         sortable: false,
     },
     {
-        name: 'description',
-        label: 'Description',
-        field: (row) => row.description,
-        format: (val) => (val == '' ? 'No description' : val),
-        align: 'center',
-        sortable: false,
-    },
-    {
         name: 'action',
         label: 'Action',
         align: 'center',
@@ -98,21 +82,20 @@ let columns = [
     },
 ];
 
-let categories = reactive([]);
+let tags = reactive([]);
 let loading = ref(false);
 
-async function getCategories() {
+async function getTags() {
     loading.value = true;
-    const response = await api.get('/categories');
+    const response = await api.get('/tags');
     loading.value = false;
 
     if (response.data.status) {
-        categories = response.data.data;
+        tags = response.data.data;
     } else {
         console.log(response.data.message);
     }
 }
-
 
 let confirm = (id) => {
     $q.dialog({
@@ -129,10 +112,10 @@ let confirm = (id) => {
         },
     }).onOk(() => {
         loading.value = true;
-        api.delete(`/categories/${id}`)
+        api.delete(`/tags/${id}`)
             .then((response) => {
                 if (response.data.status) {
-                    categories = categories.filter((category) => category.ID != id);
+                    tags = tags.filter((tag) => tag.ID != id);
                     $q.notify({
                         message: `${response.data.message}`,
                         type: 'warning',
